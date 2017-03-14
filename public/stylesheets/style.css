@@ -6,3 +6,49 @@ body {
 a {
   color: #00B7FF;
 }
+
+.login {
+    color: green;
+}
+
+.logout {
+    color: red;
+}
+
+#messages{
+    padding: 10px;
+}
+
+#messages ul{
+    margin: 0;
+    padding: 0;
+}
+
+#messages li{
+    list-style: none;
+    padding: 10px
+}
+
+#messages .success{
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+    border-radius: 4px;
+    text-align: center;
+}
+
+#messages .success_msg{
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+    border-radius: 4px;
+    text-align: center;
+}
+
+#messages .error_msg, .error{
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+    border-radius: 4px;
+    text-align: center;
+}

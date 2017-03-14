@@ -1,5 +1,26 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  head
+    // Custom Fonts
+    link(href='font-awesome/css/font-awesome.min.css', rel='stylesheet', type='text/css')
+    link(href='https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic', rel='stylesheet', type='text/css')
+  body
+      .container
+        .row
+          .col-lg-5.col-sm-6
+            hr.section-heading-spacer
+            .clearfix
+            h2.section-heading
+              | Creators:
+              br
+            p.lead
+              | Gavin Brimhall
+              br
+              | Jennifer Crouch
+              br
+              | Parker Jensen
+              br
+              | Dax Kelson
+              br
+              | Justin Messenger

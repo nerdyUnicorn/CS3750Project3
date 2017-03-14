@@ -1,0 +1,14 @@
+extends layout
+
+block content
+    .container
+        h1 Login
+        include ./includes/messages.pug
+        form(method='POST' action='/users/login')
+            div.form-group
+                label(for='username') Username:
+                input#username.form-control(type='text', placeholder="username" name='username')
+            div.form-group
+                label(for='password') Password:
+                input#password.form-control(type='password', placeholder='*****' name='password')
+            button.btn.btn-primary(type='submit') Log in 

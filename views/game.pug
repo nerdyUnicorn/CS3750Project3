@@ -1,6 +1,14 @@
 extends layout
 
 block content
+    head
+        // Game Javascript
+        link(href='../public/javascripts/game.js', rel='Javascript', type='text/js')
     .container
+        input.userName(type="hidden" value=user)
+
         h1 Game Page
+        h2=user
+
         include ./includes/messages.pug
+

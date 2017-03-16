@@ -1,15 +1,20 @@
 $(function() {
     var $rooms = $('.rooms');
-    var $user = $('.user');
-    var $startPage = $('.start');
-    var $createRoomPage = $('.createRoom');
+    var $user = $('.userName');
+    var $roomPage = $('.roomPage');
+    var $startPage = $('.startPage');
 
     var $btnNewRoom = $('#newRoomButton');
     var $inpNewRoom = $('#newRoomText');
 
+    var $btnJoinRoom = $('#joinRoomButton');
+    var $inpJoinRoom = $('#joinRoomText');
+
     var $btnSeeRooms = $('#seeRoomsButton');
 
-    $createRoomPage.hide();
+    var $roomTitle = $('.roomTitle');
+
+    $roomPage.hide();
 
     var socket = io();
 
@@ -24,6 +29,12 @@ $(function() {
         socket.emit('createRoom', room)
     }
 
+    function joinRoom(){
+        var room = $inpJoinRoom.val()
+        var user = $user.val();
+        socket.emit('joinRoom', room, user)
+    }
+
     socket.on('returnRooms', function (rooms) {
         $.each( rooms, function( index, value ){
             var $btnDiv = $('<button class="roomButtons"/>')
@@ -32,9 +43,19 @@ $(function() {
         });
     });
 
+    socket.on('joinedRoom', function(userMessage) {
+            $startPage.hide();
+            $roomPage.show();
+            $roomTitle.text(userMessage);
+    });
+
     $btnNewRoom.click(function(){
-        $user.text("Working")
+        //$user.text("Working")
         createRoom();
+    });
+
+    $btnJoinRoom.click(function(){
+        joinRoom();
     });
 
     $btnSeeRooms.click(function(){

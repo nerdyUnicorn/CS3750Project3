@@ -28,7 +28,14 @@ module.exports = (io) => {
 
         socket.on('createRoom', function(room) {
             rooms.push(room);
-            io.to(socket.id).emit('returnRooms', rooms);
+            //io.to(socket.id).emit('returnRooms', rooms);
+        });
+
+        socket.on('joinRoom', function(room, user) {
+            if (rooms.indexOf(room) != -1){
+                socket.join(room);
+                io.sockets.in(room).emit('joinedRoom', user + " has joined " + room);
+            }
         });
 
         // Client to Server message

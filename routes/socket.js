@@ -2,7 +2,9 @@ module.exports = (io) => {
 
     // server side in memory data structures go here
     let users = [];
-    let rooms = ["Room 1", "Room2"];
+    let rooms = [];
+    let numPlayers = [];
+    let numRounds = [];
 
     io.sockets.on('connection', socket => {
         
@@ -26,15 +28,20 @@ module.exports = (io) => {
             io.to(socket.id).emit('returnRooms', rooms);
         });
 
-        socket.on('createRoom', function(room) {
+        socket.on('createRoom', function(room, players, rounds) {
             rooms.push(room);
-            //io.to(socket.id).emit('returnRooms', rooms);
+            numPlayers.push(players);
+            numRounds.push(rounds);
         });
 
         socket.on('joinRoom', function(room, user) {
-            if (rooms.indexOf(room) != -1){
+            let index = rooms.indexOf(room);
+            if (index != -1){
+                let jroom = rooms[index];
+                let jplayers = numPlayers[index];
+                let jrounds = numRounds[index];
                 socket.join(room);
-                io.sockets.in(room).emit('joinedRoom', user + " has joined " + room);
+                io.sockets.in(room).emit('joinedRoom', user + " has joined " + jroom + ". \nThere will be " + jplayers + " players and " + jrounds + " rounds.");
             }
         });
 

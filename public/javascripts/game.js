@@ -1,11 +1,18 @@
 $(function() {
     var $rooms = $('.rooms');
     var $user = $('.userName');
+
     var $roomPage = $('.roomPage');
     var $startPage = $('.startPage');
+    var $createRoomPage = $('.createRoomPage');
+
+    var $btnNewGame = $('#newGameButton');
 
     var $btnNewRoom = $('#newRoomButton');
-    var $inpNewRoom = $('#newRoomText');
+
+    var $inpNewRoom = $('#newNameText');
+    var $inpNewPlayers = $('#newPlayersText');
+    var $inpNewRounds = $('#newRoundsText');
 
     var $btnJoinRoom = $('#joinRoomButton');
     var $inpJoinRoom = $('#joinRoomText');
@@ -15,10 +22,14 @@ $(function() {
     var $roomTitle = $('.roomTitle');
 
     $roomPage.hide();
+    $createRoomPage.hide();
 
     var socket = io();
 
-    //document.onload = getRooms();
+    function newGame(){
+        $startPage.hide();
+        $createRoomPage.show();
+    }
 
     function getRooms(){
         socket.emit('getRooms');
@@ -26,7 +37,11 @@ $(function() {
 
     function createRoom(){
         var room = $inpNewRoom.val()
-        socket.emit('createRoom', room)
+        var players = $inpNewPlayers.val()
+        var rounds = $inpNewRounds.val()
+        socket.emit('createRoom', room, players, rounds)
+        $createRoomPage.hide();
+        $startPage.show();
     }
 
     function joinRoom(){
@@ -47,6 +62,10 @@ $(function() {
             $startPage.hide();
             $roomPage.show();
             $roomTitle.text(userMessage);
+    });
+
+    $btnNewGame.click(function(){
+        newGame();
     });
 
     $btnNewRoom.click(function(){

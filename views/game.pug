@@ -1,6 +1,48 @@
 extends layout
 
 block content
+    head
+        // Game Javascript
+        script(src="https://code.jquery.com/jquery-1.10.2.min.js")
+        script(src='/javascripts/game.js')
+        script(src="socket.io/socket.io.js")
+        link(rel='stylesheet', href='/stylesheets/style.css')
     .container
-        h1 Game Page
+        input.userName(type="hidden" value=user)
+        
+
+        div.roomPage
+            h1.roomTitle Room Page
+        div.startPage
+            h1 Join or Create a Game
+            h2.user Try
+            
+            
+            input.room#joinRoomText(type="text" placeholder="Join Room")
+            button.room#joinRoomButton Join Room
+            //button.room#seeRoomsButton See Room
+
+            button.room#newGameButton Create New Game
+            div.rooms
+        
+        div.createRoomPage
+            h1 Create a New Game
+            div.formGroup
+                label.newName Game Room Name
+                input#newNameText(type='text', placeholder='Game Name')
+            div.formGroup
+                label.newPlayers Number of Players
+                input#newPlayersText(type='number', placeholder='Number of Players')
+            div.formGroup
+                label.newRounds Number of Rounds
+                input#newRoundsText(type='number', placeholder='Number of Rounds')
+            div.formGroup
+                div.categories
+            div.formGroup
+                button.room#newRoomButton Create New Game
+
+            
+        
+
         include ./includes/messages.pug
+

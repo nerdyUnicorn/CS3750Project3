@@ -26,7 +26,7 @@ router.post('/add', (req, res, next) => {
         question: questionIn,
         answer: answer,
         category: category });
-        
+
             Question.addQuestion(newQuestion, (err, question)=> {
                 if (err) throw err;
                 req.flash('success_msg', 'Question is added.');

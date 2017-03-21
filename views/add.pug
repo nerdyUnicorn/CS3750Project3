@@ -1,0 +1,26 @@
+extends layout
+
+block content
+    .container
+        h1 Question Bank
+        include ./includes/messages.pug
+        form(method='POST' action='/question/add')
+            div.form-group
+                label(for='question') Please enter a question:
+                input#question.form-control(type='text', placeholder='Question Text' name='question')
+            div.form-group
+                label(for='answer') Answer:
+                input#answer.form-control(type='text', placeholder='' name='answer')
+            div.form-group
+                label Category:
+                input(type='radio', name='category' value='Definitions')
+                label Definitions
+                input(type='radio', name='category' value='Famous People')
+                label Famous People
+                input(type='radio', name='category' value='Acronyms')
+                label Acronyms
+                input(type='radio', name='category' value='Movie Headlines')
+                label Movie Headlines
+                input(type='radio', name='category' value='Ludicrous Laws')
+                label Ludicrous Laws
+            button.btn.btn-primary(type='submit') Save Question

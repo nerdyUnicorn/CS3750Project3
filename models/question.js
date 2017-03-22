@@ -27,3 +27,14 @@ module.exports.checkQuestion = function (questionIn, callback) {
     const question = { question: questionIn};
     Question.findOne(question, callback);
 }
+
+module.exports.getQuestions = function(callback){
+    Question.find(callback).sort([['question', 'ascending']]);
+}
+/*
+module.exports.updateQuestion = function (questionIn, answerIn, categoryIn, callback) {
+    const question = {
+        
+    }
+    Question.findOne(question, callback);
+}*/

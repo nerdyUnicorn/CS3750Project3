@@ -6,14 +6,20 @@ const ensureAuthenticated = require('../lib/auth').ensureAuthenticated;
 let Question = require('../models/question');
 
 router.get('/add', (req, res, next) => {
-    res.render('add');
+    Question.getQuestions((err, questions) => {
+        if(err){
+            res.send(err);
+        }
+        res.render('add', {
+            questions: questions
+        });
+    });
 });
 
 router.post('/add', (req, res, next) => {
     const questionIn = req.body.question;
     const answer = req.body.answer;
     const category = req.body.category;
-
    
     Question.checkQuestion(questionIn, (err, question) =>{
         if (err) throw err;
@@ -34,7 +40,6 @@ router.post('/add', (req, res, next) => {
             });
     }
     });
-    
 });
 
 module.exports = router;

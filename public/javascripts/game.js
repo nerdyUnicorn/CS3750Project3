@@ -39,7 +39,7 @@ $(function() {
         var room = $inpNewRoom.val()
         var players = $inpNewPlayers.val()
         var rounds = $inpNewRounds.val()
-        socket.emit('createRoom', room, players, rounds)
+        socket.emit('createRoom', room, players, rounds, "Definitions");
         $createRoomPage.hide();
         $startPage.show();
     }
@@ -58,10 +58,28 @@ $(function() {
         });
     });
 
-    socket.on('joinedRoom', function(userMessage) {
-            $startPage.hide();
-            $roomPage.show();
-            $roomTitle.text(userMessage);
+    socket.on('joinedRoom', function(players) {
+        $startPage.hide();
+        $roomPage.show();
+        $roomTitle.text(players);
+    });
+
+    socket.on('sendAnswers', function(answers){
+        $startPage.hide();
+        $roomPage.show();
+        $roomTitle.text(JSON.stringify(answers));
+    });
+
+    socket.on('waitingOnQuestion', function() {
+        $startPage.hide();
+        $roomPage.show();
+        $roomTitle.text('Waiting for question to be chosen');
+    });
+
+    socket.on('sendQuestions', function(questions) {
+        $startPage.hide();
+        $roomPage.show();
+        $roomTitle.text(questions);
     });
 
     $btnNewGame.click(function(){

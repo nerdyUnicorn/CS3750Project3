@@ -46,9 +46,9 @@ module.exports = (io) => {
         });
 
         socket.on('checkRoom', function(room){
-            var t= rooms.indexOf(room);
+            var t = rooms.indexOf(room);
             console.log("t: "+t);
-            var tmp= t == -1;
+            var tmp = t == -1;
             console.log("tmp: "+tmp);
             return !tmp;
         });

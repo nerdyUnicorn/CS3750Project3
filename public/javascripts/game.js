@@ -49,7 +49,7 @@ $(function() {
     function joinRoom(){
         var room = $inpJoinRoom.val().trim();
         var user = $user.val();
-        var  ex= socket.emit('checkRoom', room);
+        var ex = socket.emit('checkRoom', room);
         if(ex){
             socket.emit('joinRoom', room, user);
         } else{

@@ -45,6 +45,14 @@ module.exports = (io) => {
             }
         });
 
+        socket.on('checkRoom', function(room){
+            var t= rooms.indexOf(room);
+            console.log("t: "+t);
+            var tmp= t == -1;
+            console.log("tmp: "+tmp);
+            return !tmp;
+        });
+
         // Client to Server message
         //socket.on('c2smsg', function(data, callback){
         //    var chatObject = {person: user.username, message: data};

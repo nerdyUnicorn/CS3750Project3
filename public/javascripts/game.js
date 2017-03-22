@@ -11,6 +11,7 @@ $(function() {
     var $btnNewRoom = $('#newRoomButton');
 
     var $inpNewRoom = $('#newNameText');
+    //check that  these are numeric
     var $inpNewPlayers = $('#newPlayersText');
     var $inpNewRounds = $('#newRoundsText');
 
@@ -35,6 +36,7 @@ $(function() {
         socket.emit('getRooms');
     }
 
+// check for numeric here
     function createRoom(){
         var room = $inpNewRoom.val()
         var players = $inpNewPlayers.val()
@@ -45,9 +47,14 @@ $(function() {
     }
 
     function joinRoom(){
-        var room = $inpJoinRoom.val()
+        var room = $inpJoinRoom.val().trim();
         var user = $user.val();
-        socket.emit('joinRoom', room, user)
+        var  ex= socket.emit('checkRoom', room);
+        if(ex){
+            socket.emit('joinRoom', room, user);
+        } else{
+            alert("This room does not exist");
+        }
     }
 
     socket.on('returnRooms', function (rooms) {
@@ -80,7 +87,6 @@ $(function() {
     $btnSeeRooms.click(function(){
         getRooms();
     })
-
 
 
 });

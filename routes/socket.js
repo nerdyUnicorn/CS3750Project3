@@ -17,6 +17,7 @@ module.exports = (io) => {
             this.playerLikes = {};
             this.chosenQuestion = "";
             this.roundAnswers = {};
+            this.chosenAnswers = {};
             this.questionsDefinitions = [];
             this.questionsFamousPeople = [];
             this.questionsAcronyms = [];
@@ -85,12 +86,29 @@ module.exports = (io) => {
         //called when 'answerQuestion' is emitted from a client who has submitted his/her
         //own answer to the chosen question.
         socket.on('answerQuestion', function(room, answer){
-            rooms[room].roundAnswers[socket.id] = answer;
+            rooms[room].roundAnswers[socket.nickname] = answer;
             if(rooms[room].roundAnswers.length == rooms[room].playerIds.length + 1){
                 io.sockets.in(room).emit('sendAnswers', rooms[room].roundAnswers);
             }
             else{
                 socket.emit('waitingForAnswers');
+            }
+        })
+
+        //called when 'choseAnswer' is emmitted from a client with the answer that they chose
+        //Adds to the scores and then returns the chosen answers and the scores
+        socket.on('choseAnswer', function(room, answer){
+            rooms[room].chosenAnswers[socket.id] = answer;
+            var userAnswerChosen = _.findKey(rooms[room].roundAnswers, answer);
+            if (userAnswerChosen == 'correct'){
+                rooms[room].playerScores[socket.nickname] += 20;
+            }
+            else{
+                rooms[room].playerScores[userAnswerChosen] += 10;
+            }
+
+            if(rooms[room].chosenAnswers.length == rooms[room].playerIds.length){
+                socket.emit('chosenAnswers', rooms[room].chosenAnswers, rooms[room].playerScores);
             }
         })
 
@@ -117,6 +135,10 @@ module.exports = (io) => {
                 //Add the socketID to the playerId's list to make a list of the keys in players
                 //so we can shuffle the order we choose
                 rooms[room].playerIds.push(socket.id);
+
+                //Add the user to the playerScores and playerLikes lists
+                rooms[room].playerScores[socket.nickname] = 0;
+                rooms[room].playerLikes[socket.nickname] = 0;
                 
                 
                 //If all the players have joined then start the game

@@ -31,10 +31,13 @@ module.exports.checkQuestion = function (questionIn, callback) {
 module.exports.getQuestions = function(callback){
     Question.find(callback).sort([['question', 'ascending']]);
 }
-/*
-module.exports.updateQuestion = function (questionIn, answerIn, categoryIn, callback) {
-    const question = {
-        
-    }
-    Question.findOne(question, callback);
-}*/
+
+//get single question
+module.exports.getQuestionById = function(id, callback){
+    Question.findById(id, callback);
+}
+
+
+module.exports.updateQuestion = function (query, update, options, callback) {
+    Question.findOneAndUpdate(query, update, options, callback);
+}

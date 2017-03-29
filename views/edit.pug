@@ -1,0 +1,53 @@
+extends layout
+
+block content
+    .container
+        h1 #{title}
+        include ./includes/messages.pug
+        form(method='POST' action='/question/edit/'+question._id)
+            div.form-group
+                label(for='question') Question:
+                input#question.form-control(type='text', value=question.question name='question')
+            div.form-group
+                label(for='answer') Answer:
+                input#answer.form-control(type='text', value=question.answer name='answer')
+            div.form-group
+                legend Category:
+                label.radio-inline
+                if question.category == 'Definitions'
+                    input(type='radio', name='category' id='Definitions' value='Definitions' checked='checked')
+                    | Definitions
+                else
+                    input(type='radio', name='category' id='Definitions' value='Definitions')
+                    | Definitions
+                label.radio-inline
+                if question.category == 'Famous People'
+                    input(type='radio', name='category' id='Famous People' value='Famous People' checked='checked')
+                    | Famous People
+                else
+                    input(type='radio', name='category' id='Famous People' value='Famous People')
+                    | Famous People
+                label.radio-inline
+                if question.category == 'Acronyms'
+                    input(type='radio', name='category' id='Acronyms' value='Acronyms' checked='checked')
+                    | Acronyms
+                else
+                    input(type='radio', name='category' id='Acronyms' value='Acronyms')
+                    | Acronyms
+                label.radio-inline
+                if question.category == 'Movie Headlines'
+                    input(type='radio', name='category' id='Movie Headlines' value='Movie Headlines' checked='checked')
+                    | Movie Headlines
+                else
+                    input(type='radio', name='category' id='Movie Headlines' value='Movie Headlines')
+                    | Movie Headlines
+                label.radio-inline
+                if question.category == 'Ludicrous Laws'
+                    input(type='radio', name='category' id='Ludicrous Laws' value='Ludicrous Laws' checked='checked')
+                    | Ludicrous Laws
+                else
+                    input(type='radio', name='category' id='Ludicrous Laws' value='Ludicrous Laws')
+                    | Ludicrous Laws
+                label.radio-inline
+            input.btn.btn-primary(type='submit', name='submit', value='Save Question')
+            a.btn.btn-default(href='/question/add') Back

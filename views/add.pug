@@ -24,7 +24,8 @@ block content
                 input(type='radio', name='category' value='Ludicrous Laws')
                 label Ludicrous Laws
             button.btn.btn-primary(type='submit') Save Question
-        ul
+        br
+        ul#names
             each question, i in questions
-                li 
-                    a(href='/question/edit/'+question._id) #{question.question}
+                li(title=question.category)
+                    a(href='/question/edit/'+question._id title=question.category) #{question.question}

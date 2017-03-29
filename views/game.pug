@@ -9,14 +9,27 @@ block content
         link(rel='stylesheet', href='/stylesheets/style.css')
     .container
         input.userName(type="hidden" value=user)
+        input#room(type="hidden")
         
 
         div.roomPage
             h1.roomTitle Room Page
+
+        div.answersPage
+            h1.questionTitle
+
+        div.reviewAnswers
+
+
+        div.answerQuestion
+            h1.chosenQuestion
+            input.myAnswer(type="text" placeholder="Answer")
+            button#sendMyAnswer Send My Answer
+
+        div.chooseQuestions
+            
         div.startPage
             h1 Join or Create a Game
-            h2.user Try
-            
             
             input.room#joinRoomText(type="text" placeholder="Join Room")
             button.room#joinRoomButton Join Room

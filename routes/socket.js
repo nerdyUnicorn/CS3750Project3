@@ -87,30 +87,65 @@ module.exports = (io) => {
         //own answer to the chosen question.
         socket.on('answerQuestion', function(room, answer){
             rooms[room].roundAnswers[socket.nickname] = answer;
-            if(rooms[room].roundAnswers.length == rooms[room].playerIds.length + 1){
-                io.sockets.in(room).emit('sendAnswers', rooms[room].roundAnswers);
+            
+            if(Object.keys(rooms[room].roundAnswers).length == rooms[room].playerIds.length + 1){
+                var tempAnswers = []
+                for (var key in rooms[room].roundAnswers){
+                    tempAnswers.push(rooms[room].roundAnswers[key]);
+                }
+                tempAnswers = shuffleArray(tempAnswers);
+                io.sockets.in(room).emit('sendAnswers', tempAnswers, rooms[room].chosenQuestion);
             }
             else{
                 socket.emit('waitingForAnswers');
             }
         })
 
+        //Timer interval for starting a new round
+        var interval = null;
+
         //called when 'choseAnswer' is emmitted from a client with the answer that they chose
         //Adds to the scores and then returns the chosen answers and the scores
         socket.on('choseAnswer', function(room, answer){
-            rooms[room].chosenAnswers[socket.id] = answer;
-            var userAnswerChosen = _.findKey(rooms[room].roundAnswers, answer);
-            if (userAnswerChosen == 'correct'){
-                rooms[room].playerScores[socket.nickname] += 20;
-            }
-            else{
-                rooms[room].playerScores[userAnswerChosen] += 10;
+            rooms[room].chosenAnswers[socket.nickname] = answer;
+            for (var key in rooms[room].roundAnswers){
+                if(rooms[room].roundAnswers[key] == answer){
+                    if (key == 'correct'){
+                        rooms[room].playerScores[socket.nickname] += 20;
+                        console.log("Chose the right answer!")
+                    }
+                    else{
+                        rooms[room].playerScores[key] += 10;
+                        console.log("Chose the wrong answer!")
+                    }
+                }
             }
 
-            if(rooms[room].chosenAnswers.length == rooms[room].playerIds.length){
-                socket.emit('chosenAnswers', rooms[room].chosenAnswers, rooms[room].playerScores);
+            if(Object.keys(rooms[room].chosenAnswers).length == rooms[room].playerIds.length){
+                io.sockets.in(room).emit('chosenAnswers', rooms[room].chosenAnswers, rooms[room].playerScores);
+                console.log(rooms[room].chosenAnswers);
+                interval = setInterval(function() {
+                    newRound(room);
+                }, 10000);
+            }
+            else{
+                socket.emit('waitingForChosenAnswers')
             }
         })
+
+        //clear out the game info object elements that need to be and update the round.
+        function newRound(room){
+            clearInterval(interval);
+            rooms[room].roundAnswers = {};
+            rooms[room].chosenAnswers = {};
+            console.log(rooms[room].chosenAnswers);
+            console.log(rooms[room].roundAnswers);
+            rooms[room].chosenQuestion = "";
+            rooms[room].currentRound++;
+            io.sockets.in(room).emit('newRound');
+
+            startRound(room);
+        }
 
 
 /***************************************************************************************************/
@@ -174,8 +209,8 @@ module.exports = (io) => {
 
             console.log(rooms[room].questions)
             //shuffle questions
-            rooms[room].questions = shuffleArray(rooms[room].questions);
-            console.log(rooms[room].questions)
+            rooms[room].questions = shuffleArray(rooms[room].questionsDefinitions);
+            console.log(rooms[room].questionsDefinitions)
 
             //shuffle playerIds so hosting is shuffled
             rooms[room].playerIds = shuffleArray(rooms[room].playerIds);
@@ -183,6 +218,11 @@ module.exports = (io) => {
             //set the current round to be round 1
             rooms[room].currentRound = 1;
 
+            startRound(room);
+        }
+
+        //function called to start a new round
+        function startRound(room){
             //Let all the clients know we are waiting on the host to choose a question
             io.sockets.in(room).emit("waitingOnQuestion");
 

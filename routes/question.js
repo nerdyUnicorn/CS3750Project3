@@ -5,15 +5,23 @@ const ensureAuthenticated = require('../lib/auth').ensureAuthenticated;
 
 let Question = require('../models/question');
 
+//get the add question page
 router.get('/add', (req, res, next) => {
-    res.render('add');
+    Question.getQuestions((err, questions) => {
+        if(err){
+            res.send(err);
+        }
+        res.render('add', {
+            questions: questions
+        });
+    });
 });
 
+//send the information to save in the db
 router.post('/add', (req, res, next) => {
     const questionIn = req.body.question;
     const answer = req.body.answer;
     const category = req.body.category;
-
    
     Question.checkQuestion(questionIn, (err, question) =>{
         if (err) throw err;
@@ -34,7 +42,33 @@ router.post('/add', (req, res, next) => {
             });
     }
     });
+});
+
+//get the edit page by the question id
+router.get('/edit/:id', (req, res, next) => {
+    Question.getQuestionById(req.params.id, (err, question) => {
+        if (err) throw err;
+        else{
+            res.render('edit', {
+             title: 'Edit Question',
+             question: question
+            });
+        }
+    })
     
 });
+
+//save the update to the question
+router.post('/edit/:id', (req, res, next)=> {
+    let question = new Question();
+    const query = {_id: req.params.id}
+    const update = {question: req.body.question, answer: req.body.answer, category: req.body.category}
+
+    Question.updateQuestion(query, update, {}, (err, question) => {
+        if(err) throw err;
+        req.flash('success_msg', 'Question is updated.');
+        res.redirect('/question/edit/'+question._id);
+    });
+})
 
 module.exports = router;

@@ -2,6 +2,48 @@ module.exports = (io) => {
 
     let Question = require('../models/question');
 
+    var definitionQuestions = {}
+    var famousPeopleQuestions = {}
+    var acronymQuestions = {}
+    var movieHeadlineQuestions = {}
+    var ludicrousLawsQuestions = {}
+
+    //set up the function to get all quesetions from mongoose then call it when the server starts
+    function getQuestions(){
+        Question.getDefinitions(setDefinitions);
+        Question.getFamousPeople(setFamousPeople);
+        Question.getAcronyms(setAcronyms);
+        Question.getMovieHeadlines(setMovieHeadlines);
+        Question.getLudicrousLaws(setLudicrousLaws);
+    }
+    getQuestions();
+
+    function setDefinitions(results){
+        definitionQuestions = results;
+    }
+
+    function setFamousPeople(results){
+        famousPeopleQuestions = results;
+    }
+
+    function setAcronyms(results){
+        acronymQuestions = results;
+    }
+
+    function setMovieHeadlines(results){
+        movieHeadlineQuestions = results;
+    }
+
+    function setLudicrousLaws(results){
+        ludicrousLawsQuestions = results;
+    }
+
+    //refresh the question bank every 500 seconds
+    var refreshQuestionBank = null
+    refreshQuestionBank = setInterval(function() {                   
+        getQuestions();
+    }, 500000);
+
 
 //Curly Braces {} mean a dictionary object or an array with a programmed individual key.
     class roomInfo{
@@ -23,8 +65,14 @@ module.exports = (io) => {
             this.questionsAcronyms = [];
             this.questionsMovieHeadlines = [];
             this.questionsLudicrousLaws = [];
+            this.questionsAnswersDefinitions = {};
+            this.questionsAnswersFamousPeople = {};
+            this.questionsAnswersAcronyms = {};
+            this.questionsAnswersMovieHeadlines = {};
+            this.questionsAnswersLudicrousLaws = {};
+            this.roundQuestions = {};
             this.currentRound = 0;
-            console.log(this);
+            //console.log(this);
         }
     }
 
@@ -63,9 +111,69 @@ module.exports = (io) => {
         //Called when 'createRoom' is emitted from a client This takes in the parameters for 
         //room name (if none create one), number of players, number of rounds, and categories to be used
         socket.on('createRoom', function(roomName, players, rounds, categories) {
-            rooms[roomName] = new roomInfo(roomName, players, rounds, categories);
-            joinRoom(roomName, socket);
+            roomName.trim();
+            players.trim();
+            rounds.trim();
+            var problems = ''
+            if(isNaN(players) || isNaN(parseInt(players))){
+                problems = problems + 'Number of players must contain a number.\n';
+            }
+            if(Number(players) > 10){
+                problems = problems + 'Number of players must be less than 10. \n';
+            }
+            if(isNaN(rounds) || isNaN(parseInt(rounds))){
+                problems = problems + 'Number of rounds must contain a number.\n';
+            }
+            if(Number(rounds) > 10){
+                problems = problems + 'Number of rounds must be less than 10. \n';
+            }
+            if(categories.length < 1){
+                problems = problems + 'You must select at least 1 category';
+            }
+            
+            if(problems != ''){
+                socket.emit('createRoomErrors', problems);
+                problems = '';
+                return;
+            }
+            if(Object.keys(rooms).includes(roomName)){
+                var safeRoomName = false;
+                var exampleRoom = '';
+                while(!safeRoomName){
+                    exampleRoom = makeid();
+                    if(!Object.keys(rooms).includes(exampleRoom)){
+                        safeRoomName = true;
+                    }
+                }
+                socket.emit('roomAlreadyExists', exampleRoom);
+            }
+            else{
+                if(roomName == null || roomName == ""){
+                    var safeRoomName = false;
+                    var exampleRoom = '';
+                    while(!safeRoomName){
+                        exampleRoom = makeid();
+                        if(!Object.keys(rooms).includes(exampleRoom)){
+                            safeRoomName = true;
+                        }
+                    }
+                    roomName = exampleRoom;
+                }
+                rooms[roomName] = new roomInfo(roomName, players, rounds, categories);
+                joinRoom(roomName, socket);
+            }
         });
+
+        function makeid()
+        {
+            var text = "";
+            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+            for( var i=0; i < 5; i++ )
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+            return text;
+        }
 
         //Called when 'joinroom' is emitted from a client with the room name calls the 
         //function joinRoom
@@ -78,7 +186,8 @@ module.exports = (io) => {
         socket.on('selectedQuestion', function(room, question){
             //get the question that was chosen and find the answer in the database
             rooms[room].chosenQuestion = question;
-            rooms[room].roundAnswers['correct'] = "The right answer"
+
+            rooms[room].roundAnswers['correct'] = rooms[room].roundQuestions[question];
 
             io.sockets.in(room).emit("sendSelectedQuestion", question);
         })
@@ -144,7 +253,12 @@ module.exports = (io) => {
             rooms[room].currentRound++;
             io.sockets.in(room).emit('newRound');
 
-            startRound(room);
+            if(rooms[room].currentRound > rooms[room].numRounds){
+                endGame(room);
+            }
+            else{
+                startRound(room);
+            }
         }
 
 
@@ -158,7 +272,7 @@ module.exports = (io) => {
             //Check if the room is in the list of rooms
             if(room in rooms) {
                 //if the room is full already emit 'roomFull' to the client
-                if(rooms[room].players.count == rooms[room].numPlayers) {
+                if(Object.keys(rooms[room].players).count == rooms[room].numPlayers) {
                     socket.emit('roomFull');
                     return;
                 }
@@ -178,7 +292,7 @@ module.exports = (io) => {
                 
                 //If all the players have joined then start the game
                 if(rooms[room].playerIds.length == rooms[room].numPlayers) {
-                    startGame(room);
+                   startGame(room);
                 }
                 //if not all players have joined then send a list of those who have
                 else{
@@ -190,7 +304,7 @@ module.exports = (io) => {
                         roomPlayers.push(socket.nickname);
                         console.log('User: ' + socket.nickname);
                     }
-                    io.sockets.in(room).emit('joinedRoom', roomPlayers);
+                    io.sockets.in(room).emit('joinedRoom', roomPlayers, room);
                 }
             }
             else{
@@ -201,16 +315,50 @@ module.exports = (io) => {
 
         //function called when all the players have joined
         function startGame(room){
-            //Get questions These are just temporary questions
-            //Really we need to go grab questions enough for every round from 
-            //the database
-            rooms[room].questionsDefinitions.push("Anatidaephobia")
-            rooms[room].questionsDefinitions.push("Taradiddle")
+            //Get questions from the database
+            for (var cat in rooms[room].categories){
+                if(rooms[room].categories[cat] == 'Definitions'){
+                    var defs = shuffleArray(definitionQuestions);
+                    var i = 0;
+                    for(i = 0; i < Number(rooms[room].numRounds); i++){
+                        rooms[room].questionsAnswersDefinitions[defs[i].question] = defs[i].answer;
+                        rooms[room].questionsDefinitions.push(defs[i].question);
+                    }
+                }
+                else if(rooms[room].categories[cat] == 'Movie Headlines'){
+                    var defs = shuffleArray(movieHeadlineQuestions);
+                    var i = 0;
+                    for(i = 0; i < Number(rooms[room].numRounds); i++){
+                        rooms[room].questionsAnswersMovieHeadlines[defs[i].question] = defs[i].answer;
+                        rooms[room].questionsMovieHeadlines.push(defs[i].question);
+                    }
+                }
+                else if(rooms[room].categories[cat] == 'Famous People'){
+                    var defs = shuffleArray(famousPeopleQuestions);
+                    var i = 0;
+                    for(i = 0; i < Number(rooms[room].numRounds); i++){
+                        rooms[room].questionsAnswersFamousPeople[defs[i].question] = defs[i].answer;
+                        rooms[room].questionsFamousPeople.push(defs[i].question);
+                    }
+                }
+                else if(rooms[room].categories[cat] == 'Acronyms'){
+                    var defs = shuffleArray(acronymQuestions);
+                    var i = 0;
+                    for(i = 0; i < Number(rooms[room].numRounds); i++){
+                        rooms[room].questionsAnswersAcronyms[defs[i].question] = defs[i].answer;
+                        rooms[room].questionsAcronyms.push(defs[i].question);
+                    }
+                }
+                else if(rooms[room].categories[cat] == 'Ludicrous Laws'){
+                    var defs = shuffleArray(ludicrousLawsQuestions);
+                    var i = 0;
+                    for(i = 0; i < Number(rooms[room].numRounds); i++){
+                        rooms[room].questionsAnswersLudicrousLaws[defs[i].question] = defs[i].answer;
+                        rooms[room].questionsLudicrousLaws.push(defs[i].question);
+                    }
+                }
+            }
 
-            console.log(rooms[room].questions)
-            //shuffle questions
-            rooms[room].questions = shuffleArray(rooms[room].questionsDefinitions);
-            console.log(rooms[room].questionsDefinitions)
 
             //shuffle playerIds so hosting is shuffled
             rooms[room].playerIds = shuffleArray(rooms[room].playerIds);
@@ -243,7 +391,35 @@ module.exports = (io) => {
             let host = io.sockets.connected[hostId];
 
             //Need to grab questions from specific categories here not just definition questions
-            let questions = rooms[room].questionsDefinitions;
+            let questions = {};
+
+            for (var cat in rooms[room].categories){
+                if(rooms[room].categories[cat] == 'Definitions'){
+                    let q = rooms[room].questionsDefinitions[currRound - 1];
+                    questions['Definitions'] = q;
+                    rooms[room].roundQuestions[q] = rooms[room].questionsAnswersDefinitions[q];
+                }
+                else if(rooms[room].categories[cat] == 'Movie Headlines'){
+                    let q = rooms[room].questionsMovieHeadlines[currRound - 1];
+                    questions['Movie Headlines'] = q;
+                    rooms[room].roundQuestions[q] = rooms[room].questionsAnswersMovieHeadlines[q];
+                }
+                else if(rooms[room].categories[cat] == 'Famous People'){
+                    let q = rooms[room].questionsFamousPeople[currRound - 1];
+                    questions['Famous People'] = q;
+                    rooms[room].roundQuestions[q] = rooms[room].questionsAnswersFamousPeople[q];
+                }
+                else if(rooms[room].categories[cat] == 'Acronyms'){
+                    let q = rooms[room].questionsAcronyms[currRound - 1];
+                    questions['Acronyms'] = q;
+                    rooms[room].roundQuestions[q] = rooms[room].questionsAnswersAcronyms[q];
+                }
+                else if(rooms[room].categories[cat] == 'Ludicrous Laws'){
+                    let q = rooms[room].questionsLudicrousLaws[currRound - 1];
+                    questions['Ludicrous Laws'] = q;
+                    rooms[room].roundQuestions[q] = rooms[room].questionsAnswersLudicrousLaws[q];
+                }
+            }
 
             //Questions to choose from are only sent to the new host.
             host.emit("sendQuestions", questions);
@@ -259,6 +435,10 @@ module.exports = (io) => {
                 array[j] = temp;
             }
             return array;
+        }
+
+        function endGame(room){
+
         }
         
 

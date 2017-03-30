@@ -1,6 +1,9 @@
 extends layout
 
+
 block content
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
     .container
         h1 Question Bank
         include ./includes/messages.pug
@@ -25,7 +28,61 @@ block content
                 label Ludicrous Laws
             button.btn.btn-primary(type='submit') Save Question
         br
-        ul#names
-            each question, i in questions
-                li(title=question.category)
-                    a(href='/question/edit/'+question._id title=question.category) #{question.question}
+    .container
+        h4 Question Viewer
+        p Categories -- Click heading to collapse
+        .panel-group
+            .panel.panel-default
+                .panel-heading
+                    h4.panel-title
+                        a(data-toggle='collapse', href='#collapse1') Definitions
+                #collapse1.panel-collapse.collapse
+                    ul
+                        each question, i in questions
+                            if(question.category == 'Definitions')
+                                li(title=question.category)
+                                    a(href='/question/edit/'+question._id title=question.category) #{question.question}
+        .panel-group
+            .panel.panel-default
+                .panel-heading
+                    h4.panel-title
+                        a(data-toggle='collapse', href='#collapse2') Famous People
+                #collapse2.panel-collapse.collapse
+                    ul
+                        each question, i in questions
+                            if(question.category == 'Famous People')
+                                li(title=question.category)
+                                    a(href='/question/edit/'+question._id title=question.category) #{question.question}
+        .panel-group
+            .panel.panel-default
+                .panel-heading
+                    h4.panel-title
+                        a(data-toggle='collapse', href='#collapse3') Acronyms
+                #collapse3.panel-collapse.collapse
+                    ul
+                        each question, i in questions
+                            if(question.category == 'Acronyms')
+                                li(title=question.category)
+                                    a(href='/question/edit/'+question._id title=question.category) #{question.question}
+        .panel-group
+            .panel.panel-default
+                .panel-heading
+                    h4.panel-title
+                        a(data-toggle='collapse', href='#collapse4') Movie Headlines
+                #collapse4.panel-collapse.collapse
+                    ul
+                        each question, i in questions
+                            if(question.category == 'Movie Headlines')
+                                li(title=question.category)
+                                    a(href='/question/edit/'+question._id title=question.category) #{question.question}
+        .panel-group
+            .panel.panel-default
+                .panel-heading
+                    h4.panel-title
+                        a(data-toggle='collapse', href='#collapse5') Ludicrous Laws
+                #collapse5.panel-collapse.collapse
+                    ul
+                        each question, i in questions
+                            if(question.category == 'Ludicrous Laws')
+                                li(title=question.category)
+                                    a(href='/question/edit/'+question._id title=question.category) #{question.question}

@@ -1,0 +1,56 @@
+extends layout
+
+block content
+    .content
+    include ./includes/messages.pug
+
+        
+        <h1 style="position:absolute; top:120px; left:525px"> Game Ended!!</h1>
+
+        <img style="position:absolute; top:200px; right:610px" src="C:\Users\Owner\CS3750Project3\bin\thWCCKGJ8R.jpg">
+
+        <h2 style="position:absolute; top: 200px; left: 175px"> Socres
+        <div style="width:150px; height:300; border:3px solid green;"> 
+            h4 bob = 10
+            h4 bob = 10
+            h4 bob = 10
+            h4 bob = 10
+            h4 bob = 10
+            h4 bob = 10
+            h4 bob = 10
+            h4 bob = 10
+            h4 bob = 10
+            h4 bob = 10
+        </div>
+
+        <h2 style="position:absolute; top: 450px; right: 600px"> Who guessed who's answers </h2>
+        <div style="position:absolute; top:510px; right: 720px; width:150px; height:300; border:3px solid green;"> 
+            h4 bob = 10
+            h4 bob = 10
+            h4 bob = 10
+            h4 bob = 10
+            h4 bob = 10
+            h4 bob = 10
+            h4 bob = 10
+            h4 bob = 10
+            h4 bob = 10
+            h4 bob = 10
+        </div>
+        
+        <h2 style="position:absolute; top: 200px; right: 100px"> Number of correct answers
+        <div style="position:absolute; top:40px; right: 100px; width:150px; height:300; border:3px solid green;"> 
+            h4 bob = 10
+            h4 bob = 10
+            h4 bob = 10
+            h4 bob = 10
+            h4 bob = 10
+            h4 bob = 10
+            h4 bob = 10
+            h4 bob = 10
+            h4 bob = 10
+            h4 bob = 10
+        </div>
+
+        <h2 style="position:absolute; top:800px; left: 150px"> 
+        form(method='POST' action='/game/new')
+        button.btn.btn-primary(type= 'submit') New Game

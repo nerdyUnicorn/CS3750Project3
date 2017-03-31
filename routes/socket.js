@@ -251,12 +251,13 @@ module.exports = (io) => {
             console.log(rooms[room].roundAnswers);
             rooms[room].chosenQuestion = "";
             rooms[room].currentRound++;
-            io.sockets.in(room).emit('newRound');
+            
 
             if(rooms[room].currentRound > rooms[room].numRounds){
                 endGame(room);
             }
             else{
+                io.sockets.in(room).emit('newRound');
                 startRound(room);
             }
         }

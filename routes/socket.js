@@ -242,6 +242,21 @@ module.exports = (io) => {
             }
         })
 
+        socket.on('restartGame', function(room){
+            rooms[room].questionsAnswersDefinitions = {};
+            rooms[room].questionsDefinitions = [];
+            rooms[room].questionsAnswersMovieHeadlines = {};
+            rooms[room].questionsMovieHeadlines = [];
+            rooms[room].questionsAnswersFamousPeople = {};
+            rooms[room].questionsFamousPeople = [];
+            rooms[room].questionsAnswersAcronyms = {};
+            rooms[room].questionsAcronyms = [];
+            rooms[room].questionsAnswersLudicrousLaws = {};
+            rooms[room].questionsLudicrousLaws = [];
+
+            startGame(room);
+        });
+
         //clear out the game info object elements that need to be and update the round.
         function newRound(room){
             clearInterval(interval);
@@ -251,6 +266,10 @@ module.exports = (io) => {
             console.log(rooms[room].roundAnswers);
             rooms[room].chosenQuestion = "";
             rooms[room].currentRound++;
+
+            for(key in playerScores){
+                playerScores[key] = 0;
+            }
             
 
             if(rooms[room].currentRound > rooms[room].numRounds){
@@ -439,7 +458,30 @@ module.exports = (io) => {
         }
 
         function endGame(room){
+            var items = Object.keys(rooms[room].playerScores).map(function(key) {
+                return [key, rooms[room].playerScores[key]];
+            });
+            var finalScores = items.sort(function(first, second) {return second[1] - first[1];});
 
+            /******************************!!!!!!!!!@@@@@@@@########$$$$$$$$$$%%%%%%%%%%%%%%%%%^^^^^^^^^^^^^^^^&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+             * ******************************!!!!!!!!!@@@@@@@@########$$$$$$$$$$%%%%%%%%%%%%%%%%%^^^^^^^^^^^^^^^^&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+             * ******************************!!!!!!!!!@@@@@@@@########$$$$$$$$$$%%%%%%%%%%%%%%%%%^^^^^^^^^^^^^^^^&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+             * ******************************!!!!!!!!!@@@@@@@@########$$$$$$$$$$%%%%%%%%%%%%%%%%%^^^^^^^^^^^^^^^^&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+             * ******************************!!!!!!!!!@@@@@@@@########$$$$$$$$$$%%%%%%%%%%%%%%%%%^^^^^^^^^^^^^^^^&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+                        THIS IS WHERE WE NEED TO SAVE THE GAME INFORMATION ALL THE VARIABLES NEEDED ARE CREATED BELOW
+                        var dbRoomName = rooms[room].name;
+                        var dbWinner = finalScores[0][0];
+                        var dbNumQuestions = rooms[room].numRounds;
+                        var dbScores = rooms[room].playerScores;
+                        var dbPlayers = Object.keys(rooms[room].playerScores);
+                        var dbNumRounds = rooms[room].numRounds;
+                        var dbDateTime = new Date();
+            ******************************!!!!!!!!!@@@@@@@@########$$$$$$$$$$%%%%%%%%%%%%%%%%%^^^^^^^^^^^^^^^^&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+            ******************************!!!!!!!!!@@@@@@@@########$$$$$$$$$$%%%%%%%%%%%%%%%%%^^^^^^^^^^^^^^^^&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+            ******************************!!!!!!!!!@@@@@@@@########$$$$$$$$$$%%%%%%%%%%%%%%%%%^^^^^^^^^^^^^^^^&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+            ******************************!!!!!!!!!@@@@@@@@########$$$$$$$$$$%%%%%%%%%%%%%%%%%^^^^^^^^^^^^^^^^&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+            *****************************!!!!!!!!!@@@@@@@@########$$$$$$$$$$%%%%%%%%%%%%%%%%%^^^^^^^^^^^^^^^^&&&&&&&&&&&&&&&&&&&&&&&&&&&&*/
+            io.sockets.in(room).emit('endGame', finalScores);
         }
         
 

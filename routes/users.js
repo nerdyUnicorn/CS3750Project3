@@ -17,11 +17,11 @@ router.get('/login', (req, res, next) => {
 });
 
 router.post('/login', (req, res, next) => {
-  passport.authenticate('local', {
-    successRedirect: '/game', // Remember to change redirect.
-    failureRedirect: '/users/login',
-    failureFlash: true
-  })(req, res, next);
+    passport.authenticate('local', {
+        successRedirect: '/game', // Remember to change redirect.
+        failureRedirect: '/users/login',
+        failureFlash: true
+    })(req, res, next);
 });
 
 // Register Form
@@ -51,26 +51,26 @@ router.post('/register', (req, res, next) => {
             errors: errors
         });
     } else {
-	// check for already registered user
+        // check for already registered user
         User.getUserByUsername(username, (err, user) => {
             if (err) throw err;
-	    if (user != null) {
-		    req.flash('error_msg', "Username is already taken");
-		    res.redirect('/users/register');
-	    } else {
-		// create new user
-		const newUser = new User({
-		    username: username,
-		    email: email,
-		    password: password
-		});
+            if (user != null) {
+                req.flash('error_msg', "Username is already taken");
+                res.redirect('/users/register');
+            } else {
+                // create new user
+                const newUser = new User({
+                    username: username,
+                    email: email,
+                    password: password
+                });
 
-		User.registerUser(newUser, (err, user) => {
-		    if (err) throw err;
-		    req.flash('success_msg','You are registered and can log in');
-		    res.redirect('/users/login');
-		});
-	    }
+                User.registerUser(newUser, (err, user) => {
+                    if (err) throw err;
+                    req.flash('success_msg', 'You are registered and can log in');
+                    res.redirect('/users/login');
+                });
+            }
         });
     }
 });

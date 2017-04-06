@@ -166,6 +166,8 @@ $(function() {
     //called when a round is started and the host is choosing the question for the round.
     socket.on('waitingOnQuestion', function() {
         $startPage.hide();
+        $endGamePage.hide();
+        $createRoomPage.hide();
         $reviewAnswersPage.hide();
         $roomNamePage.hide();
         $roomTitle.text('Waiting for the host to choose a question for this round ...');
@@ -174,6 +176,8 @@ $(function() {
     //called when a round is started and you are the host. It displays "questions" as buttons to choose from
     socket.on('sendQuestions', function(questions) {
         $startPage.hide();
+        $createRoomPage.hide();
+        $endGamePage.hide();
         $reviewAnswersPage.hide();
         $chooseQuestions.show();
         $roomNamePage.hide();
@@ -276,6 +280,8 @@ $(function() {
 
     socket.on('endGame', function(scores){
         $reviewAnswersPage.hide();
+        $( "input" ).remove( ".btnQuestions" );
+        $( "input" ).remove( ".selectedAnswer" );
         $chooseQuestions.empty();
         $reviewAnswersPage.empty();
         $inpMyAnswer.val('');

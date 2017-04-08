@@ -118,13 +118,13 @@ module.exports = (io) => {
             if(isNaN(players) || isNaN(parseInt(players))){
                 problems = problems + 'Number of players must contain a number.\n';
             }
-            if(Number(players) > 10){
+            if(Number(players) > 10 || Number(players) < 1){
                 problems = problems + 'Number of players must be less than 10. \n';
             }
             if(isNaN(rounds) || isNaN(parseInt(rounds))){
                 problems = problems + 'Number of rounds must contain a number.\n';
             }
-            if(Number(rounds) > 10){
+            if(Number(rounds) > 10 || Number(rounds) < 1){
                 problems = problems + 'Number of rounds must be less than 10. \n';
             }
             if(categories.length < 1){
@@ -224,8 +224,7 @@ module.exports = (io) => {
                         console.log("Chose the right answer!")
                     }
                     else{
-                        rooms[room].playerScores[key] += 10;
-                        console.log("Chose the wrong answer!")
+                        rooms[room].playerScores[key] += 10;                        console.log("Chose the wrong answer!")
                     }
                 }
             }
@@ -254,6 +253,10 @@ module.exports = (io) => {
             rooms[room].questionsAnswersLudicrousLaws = {};
             rooms[room].questionsLudicrousLaws = [];
 
+            for(key in rooms[room].playerScores){
+                rooms[room].playerScores[key] = 0;
+            }
+
             startGame(room);
         });
 
@@ -266,11 +269,7 @@ module.exports = (io) => {
             console.log(rooms[room].roundAnswers);
             rooms[room].chosenQuestion = "";
             rooms[room].currentRound++;
-
-            //for(key in playerScores){
-              //  playerScores[key] = 0;
-            //}
-            
+         
 
             if(rooms[room].currentRound > rooms[room].numRounds){
                 endGame(room);

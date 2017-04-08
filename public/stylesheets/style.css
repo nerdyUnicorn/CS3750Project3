@@ -1,11 +1,113 @@
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font: 14px "Arial Black", Helvetica, Arial, sans-serif;
+  background-image: url("../stylesheets/images/background1.jpg");
+  background-size: cover;
+  background-origin: content-box; 
+
 }
 
 a {
-  color: #00B7FF;
+  color: white;
 }
+
+.container{
+  color: black;
+}
+
+/*form{
+    width: max-content;
+    border-color: steelblue;
+    border-width: 10px;
+    border-style: outset;
+    padding: 50px;
+    margin: auto;
+    border-radius: 8px;
+    background-image: url("../stylesheets/images/background2.jpg");*/
+    
+}
+
+.container h1{
+    text-align: center;
+    text-decoration: underline;
+    padding-bottom: 10px;
+}
+
+.container{
+    width: max-content;
+    border-color: steelblue;
+    border-width: 10px;
+    border-style: outset;
+    padding: 50px;
+    margin: auto;
+    border-radius: 8px;
+    text-align: center;
+    background-image: url("../stylesheets/images/white.jpg");
+}
+.finalScores{
+    border-color: steelblue;
+}
+
+/*div.startPage{
+    width: max-content;
+    border-color: steelblue;
+    border-width: 10px;
+    border-style: outset;
+    padding: 50px;
+    margin: auto;
+    border-radius: 8px;
+    text-align: center;
+}
+
+div.startPage h1{
+    text-align: center;
+    text-decoration: underline;
+    padding-bottom: 10px;
+}
+
+div.createRoomPage{
+    width: max-content;
+    border-color: steelblue;
+    border-width: 10px;
+    border-style: outset;
+    padding: 50px;
+    margin: auto;
+    border-radius: 8px;
+    text-align: center;
+}
+
+div.room{
+    width: max-content;
+    border-color: steelblue;
+    border-width: 10px;
+    border-style: outset;
+    padding: 50px;
+    margin: auto;
+    border-radius: 8px;
+    text-align: center;
+}
+
+div.roomPage{
+    width: max-content;
+    border-color: steelblue;
+    border-width: 10px;
+    border-style: outset;
+    padding: 50px;
+    margin: auto;
+    border-radius: 8px;
+    text-align: center;
+}
+
+div.answerPage{
+    width: max-content;
+    border-color: steelblue;
+    border-width: 10px;
+    border-style: outset;
+    padding: 50px;
+    margin: auto;
+    border-radius: 8px;
+    text-align: center;
+}*/
 
 .login {
     color: green;
@@ -51,6 +153,9 @@ a {
     border-color: #ebccd1;
     border-radius: 4px;
     text-align: center;
+}
+footer.page-footer {
+    margin: 0;
 }
 
 

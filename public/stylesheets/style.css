@@ -44,6 +44,9 @@ a {
     text-align: center;
     background-image: url("../stylesheets/images/white.jpg");
 }
+.finalScores{
+    border-color: steelblue;
+}
 
 /*div.startPage{
     width: max-content;

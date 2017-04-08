@@ -14,6 +14,7 @@ $(function() {
     var $selectAnswerPage = $('.answersPage');
     var $reviewAnswersPage = $('.reviewAnswers');
     var $endGamePage = $('.endGame')
+    var $loading = $('.loading');
 
     var $btnNewGame = $('#newGameButton');
     var $inpDefinitions = $('#definitions');
@@ -68,6 +69,7 @@ $(function() {
     $reviewAnswersPage.hide();
     $roomNamePage.hide();
     $endGamePage.hide();
+    $loading.hide();
 
     var socket = io();
 
@@ -146,6 +148,7 @@ $(function() {
     //When you join a room you see a list of the players that have joined (and probably need to add how many are left to join).
     socket.on('joinedRoom', function(players, room) {
         $createRoomPage.hide();
+        $loading.show();
         $startPage.hide();
         $room.val(room);
         $roomName.text('Your game name is ' + room);
@@ -170,12 +173,14 @@ $(function() {
         $createRoomPage.hide();
         $reviewAnswersPage.hide();
         $roomNamePage.hide();
+        $loading.show();
         $roomTitle.text('Waiting for the host to choose a question for this round ...');
     });
 
     //called when a round is started and you are the host. It displays "questions" as buttons to choose from
     socket.on('sendQuestions', function(questions) {
         $startPage.hide();
+        $loading.hide();
         $createRoomPage.hide();
         $endGamePage.hide();
         $reviewAnswersPage.hide();
@@ -207,6 +212,7 @@ $(function() {
     socket.on('sendSelectedQuestion', function(question){
         $chooseQuestions.hide();
         $sendAnswerPage.show();
+        $loading.hide();
         $chosenQuestion.text(question);
         $roomTitle.text('Make up an answer for the the question!')
         makeUpAnswerCountdown();
@@ -218,6 +224,7 @@ $(function() {
     //Called when you have submitted an answer and are waiting for the rest of the users to answer
     socket.on('waitingForAnswers', function() {
         $sendAnswerPage.hide();
+        $loading.show();
         $roomTitle.text('Waiting for everyone to make up an answer ...');
     });
 
@@ -225,6 +232,7 @@ $(function() {
     socket.on('sendAnswers', function(answers, question){
         $startPage.hide();
         $sendAnswerPage.hide();
+        $loading.hide();
         $selectAnswerPage.show();
         $questionTitle.text(question);
         $roomTitle.text('Choose the answer that you think is correct!')
@@ -250,6 +258,7 @@ $(function() {
     //Function called when you have selected the answer you think is right and are waiting for the other players to do the same.
     socket.on('waitingForChosenAnswers', function() {
         $selectAnswerPage.hide();
+        $loading.show();
         $roomTitle.text('Waiting for everyone to pick the answer they think is right ...');
     });
 
@@ -257,6 +266,7 @@ $(function() {
     socket.on('chosenAnswers', function(chosenAnswers, playerScores){
         $selectAnswerPage.hide();
         $reviewAnswersPage.show();
+        $loading.hide();
         $roomTitle.text('This rounds results:')
         $.each(chosenAnswers, function(key, value){
             var answerChosen= $('<h3 class="userAnswers">'+key+' chose: '+value+'</>');

@@ -1,57 +1,157 @@
-/* Custom Stylesheet */
-/**
- * Use this file to override Materialize files so you can update
- * the core Materialize files in the future
- *
- * Made By MaterializeCSS.com
- */
+body {
+  padding: 50px;
+  font: 14px "Arial Black", Helvetica, Arial, sans-serif;
+  background-image: url("../stylesheets/images/background1.jpg");
+  background-size: cover;
+  background-origin: content-box; 
 
-nav ul a,
-nav .brand-logo {
-  color: #444;
 }
 
-p {
-  line-height: 2rem;
+a {
+  color: white;
 }
 
-.button-collapse {
-  color: #26a69a;
+.container{
+  color: black;
 }
 
-.parallax-container {
-  min-height: 380px;
-  line-height: 0;
-  height: auto;
-  color: rgba(255,255,255,.9);
-}
-  .parallax-container .section {
-    width: 100%;
-  }
-
-@media only screen and (max-width : 992px) {
-  .parallax-container .section {
-    position: absolute;
-    top: 40%;
-  }
-  #index-banner .section {
-    top: 10%;
-  }
+/*form{
+    width: max-content;
+    border-color: steelblue;
+    border-width: 10px;
+    border-style: outset;
+    padding: 50px;
+    margin: auto;
+    border-radius: 8px;
+    background-image: url("../stylesheets/images/background2.jpg");*/
+    
 }
 
-@media only screen and (max-width : 600px) {
-  #index-banner .section {
-    top: 0;
-  }
-}mb
-
-.icon-block {
-  padding: 0 15px;
-}
-.icon-block .material-icons {
-  font-size: inherit;
+.container h1{
+    text-align: center;
+    text-decoration: underline;
+    padding-bottom: 10px;
 }
 
+.container{
+    width: max-content;
+    border-color: steelblue;
+    border-width: 10px;
+    border-style: outset;
+    padding: 50px;
+    margin: auto;
+    border-radius: 8px;
+    text-align: center;
+    background-image: url("../stylesheets/images/white.jpg");
+
+}
+
+/*div.startPage{
+    width: max-content;
+    border-color: steelblue;
+    border-width: 10px;
+    border-style: outset;
+    padding: 50px;
+    margin: auto;
+    border-radius: 8px;
+    text-align: center;
+}
+
+div.startPage h1{
+    text-align: center;
+    text-decoration: underline;
+    padding-bottom: 10px;
+}
+
+div.createRoomPage{
+    width: max-content;
+    border-color: steelblue;
+    border-width: 10px;
+    border-style: outset;
+    padding: 50px;
+    margin: auto;
+    border-radius: 8px;
+    text-align: center;
+}
+
+div.room{
+    width: max-content;
+    border-color: steelblue;
+    border-width: 10px;
+    border-style: outset;
+    padding: 50px;
+    margin: auto;
+    border-radius: 8px;
+    text-align: center;
+}
+
+div.roomPage{
+    width: max-content;
+    border-color: steelblue;
+    border-width: 10px;
+    border-style: outset;
+    padding: 50px;
+    margin: auto;
+    border-radius: 8px;
+    text-align: center;
+}
+
+div.answerPage{
+    width: max-content;
+    border-color: steelblue;
+    border-width: 10px;
+    border-style: outset;
+    padding: 50px;
+    margin: auto;
+    border-radius: 8px;
+    text-align: center;
+}*/
+
+.login {
+    color: green;
+}
+
+.logout {
+    color: red;
+}
+
+#messages{
+    padding: 10px;
+}
+
+#messages ul{
+    margin: 0;
+    padding: 0;
+}
+
+#messages li{
+    list-style: none;
+    padding: 10px
+}
+
+#messages .success{
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+    border-radius: 4px;
+    text-align: center;
+}
+
+#messages .success_msg{
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+    border-radius: 4px;
+    text-align: center;
+}
+
+#messages .error_msg, .error{
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+    border-radius: 4px;
+    text-align: center;
+}
 footer.page-footer {
   margin: 0;
 }

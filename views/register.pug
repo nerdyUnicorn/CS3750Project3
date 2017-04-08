@@ -2,9 +2,9 @@ extends layout
 
 block content
     .container
-        h1 Registration Form
         include ./includes/messages.pug
         form(method='post', action='/users/register')
+            h1 Registration Form
             .form-group
                 label Username (Allowed chars: alphanumeric plus _ and -)
                 input.form-control(type='text', name='username', pattern="[0-9A-Za-z-_]+" placeholder='Username', required)

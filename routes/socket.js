@@ -118,13 +118,13 @@ module.exports = (io) => {
             if(isNaN(players) || isNaN(parseInt(players))){
                 problems = problems + 'Number of players must contain a number.\n';
             }
-            if(Number(players) > 10){
+            if(Number(players) > 10 || Number(players) < 1){
                 problems = problems + 'Number of players must be less than 10. \n';
             }
             if(isNaN(rounds) || isNaN(parseInt(rounds))){
                 problems = problems + 'Number of rounds must contain a number.\n';
             }
-            if(Number(rounds) > 10){
+            if(Number(rounds) > 10 || Number(rounds) < 1){
                 problems = problems + 'Number of rounds must be less than 10. \n';
             }
             if(categories.length < 1){
@@ -241,6 +241,25 @@ module.exports = (io) => {
                 socket.emit('waitingForChosenAnswers')
             }
         })
+
+        socket.on('restartGame', function(room){
+            rooms[room].questionsAnswersDefinitions = {};
+            rooms[room].questionsDefinitions = [];
+            rooms[room].questionsAnswersMovieHeadlines = {};
+            rooms[room].questionsMovieHeadlines = [];
+            rooms[room].questionsAnswersFamousPeople = {};
+            rooms[room].questionsFamousPeople = [];
+            rooms[room].questionsAnswersAcronyms = {};
+            rooms[room].questionsAcronyms = [];
+            rooms[room].questionsAnswersLudicrousLaws = {};
+            rooms[room].questionsLudicrousLaws = [];
+
+            for(key in rooms[room].playerScores){
+                rooms[room].playerScores[key] = 0;
+            }
+
+            startGame(room);
+        });
 
         //clear out the game info object elements that need to be and update the round.
         function newRound(room){
@@ -439,7 +458,30 @@ module.exports = (io) => {
         }
 
         function endGame(room){
+            var items = Object.keys(rooms[room].playerScores).map(function(key) {
+                return [key, rooms[room].playerScores[key]];
+            });
+            var finalScores = items.sort(function(first, second) {return second[1] - first[1];});
 
+            /******************************!!!!!!!!!@@@@@@@@########$$$$$$$$$$%%%%%%%%%%%%%%%%%^^^^^^^^^^^^^^^^&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+             * ******************************!!!!!!!!!@@@@@@@@########$$$$$$$$$$%%%%%%%%%%%%%%%%%^^^^^^^^^^^^^^^^&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+             * ******************************!!!!!!!!!@@@@@@@@########$$$$$$$$$$%%%%%%%%%%%%%%%%%^^^^^^^^^^^^^^^^&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+             * ******************************!!!!!!!!!@@@@@@@@########$$$$$$$$$$%%%%%%%%%%%%%%%%%^^^^^^^^^^^^^^^^&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+             * ******************************!!!!!!!!!@@@@@@@@########$$$$$$$$$$%%%%%%%%%%%%%%%%%^^^^^^^^^^^^^^^^&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+                        THIS IS WHERE WE NEED TO SAVE THE GAME INFORMATION ALL THE VARIABLES NEEDED ARE CREATED BELOW
+                        var dbRoomName = rooms[room].name;
+                        var dbWinner = finalScores[0][0];
+                        var dbNumQuestions = rooms[room].numRounds;
+                        var dbScores = rooms[room].playerScores;
+                        var dbPlayers = Object.keys(rooms[room].playerScores);
+                        var dbNumRounds = rooms[room].numRounds;
+                        var dbDateTime = new Date();
+            ******************************!!!!!!!!!@@@@@@@@########$$$$$$$$$$%%%%%%%%%%%%%%%%%^^^^^^^^^^^^^^^^&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+            ******************************!!!!!!!!!@@@@@@@@########$$$$$$$$$$%%%%%%%%%%%%%%%%%^^^^^^^^^^^^^^^^&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+            ******************************!!!!!!!!!@@@@@@@@########$$$$$$$$$$%%%%%%%%%%%%%%%%%^^^^^^^^^^^^^^^^&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+            ******************************!!!!!!!!!@@@@@@@@########$$$$$$$$$$%%%%%%%%%%%%%%%%%^^^^^^^^^^^^^^^^&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+            *****************************!!!!!!!!!@@@@@@@@########$$$$$$$$$$%%%%%%%%%%%%%%%%%^^^^^^^^^^^^^^^^&&&&&&&&&&&&&&&&&&&&&&&&&&&&*/
+            io.sockets.in(room).emit('endGame', finalScores);
         }
         
 

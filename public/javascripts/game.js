@@ -13,14 +13,15 @@ $(function() {
     var $sendAnswerPage = $('.answerQuestion');
     var $selectAnswerPage = $('.answersPage');
     var $reviewAnswersPage = $('.reviewAnswers');
+    var $endGamePage = $('.endGame')
 
     var $btnNewGame = $('#newGameButton');
     var $inpDefinitions = $('#definitions');
     var $inpFamousPeople = $('#famousPeople');
     var $inpLudicrousLaws = $('#ludicrousLaws');
     var $inpAcronyms = $('#acronyms');
-    var $inpMovieHeadlines = $('#movieHeadlines')
-    var $inpAllCategories = $('#allCategories');;
+    var $inpMovieHeadlines = $('#movieHeadlines');
+    var $inpAllCategories = $('#allCategories');
 
     var $startError = $('.startError');
     var $createRoomError = $('.createRoomError');
@@ -44,6 +45,10 @@ $(function() {
     var $inpMyAnswer = $('.myAnswer');
     var $chosenQuestion = $('.chosenQuestion');
 
+    var $finalScores = $('.finalScores');
+    var $gameWinner = $('.gameWinner');
+    var $btnRestartGame = $('#restartGame');
+
     var $questionTitle = $('.questionTitle');
 
     var $roomTitle = $('.roomTitle');
@@ -62,6 +67,7 @@ $(function() {
     $selectAnswerPage.hide();
     $reviewAnswersPage.hide();
     $roomNamePage.hide();
+    $endGamePage.hide();
 
     var socket = io();
 
@@ -160,6 +166,8 @@ $(function() {
     //called when a round is started and the host is choosing the question for the round.
     socket.on('waitingOnQuestion', function() {
         $startPage.hide();
+        $endGamePage.hide();
+        $createRoomPage.hide();
         $reviewAnswersPage.hide();
         $roomNamePage.hide();
         $roomTitle.text('Waiting for the host to choose a question for this round ...');
@@ -168,6 +176,8 @@ $(function() {
     //called when a round is started and you are the host. It displays "questions" as buttons to choose from
     socket.on('sendQuestions', function(questions) {
         $startPage.hide();
+        $createRoomPage.hide();
+        $endGamePage.hide();
         $reviewAnswersPage.hide();
         $chooseQuestions.show();
         $roomNamePage.hide();
@@ -267,6 +277,29 @@ $(function() {
         $inpMyAnswer.val('');
         
     });
+
+    socket.on('endGame', function(scores){
+        $reviewAnswersPage.hide();
+        $( "input" ).remove( ".btnQuestions" );
+        $( "input" ).remove( ".selectedAnswer" );
+        $chooseQuestions.empty();
+        $reviewAnswersPage.empty();
+        $inpMyAnswer.val('');
+        $endGamePage.show();
+        $roomTitle.text('Game Ended!!!')
+        $gameWinner.text(scores[0][0]+' won the game!!!');
+        $.each(scores, function(key, value){
+            var finalScore= $('<h3 class="userAnswers">'+value[0]+'\'s finalScore: '+value[1]+'</h3>');
+            $finalScores.append(finalScore);
+        })
+    })
+
+    $btnRestartGame.click(function(){
+        $gameWinner.text('');
+        $finalScores.empty();
+        $endGamePage.hide();
+        socket.emit('restartGame', $room.val());
+    })
 
     $btnNewGame.click(function(){
         newGame();

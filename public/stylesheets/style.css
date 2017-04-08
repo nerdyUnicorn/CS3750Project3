@@ -43,7 +43,6 @@ a {
     border-radius: 8px;
     text-align: center;
     background-image: url("../stylesheets/images/white.jpg");
-
 }
 
 /*div.startPage{
@@ -153,6 +152,10 @@ div.answerPage{
     text-align: center;
 }
 footer.page-footer {
-  margin: 0;
+    margin: 0;
+    background-image: none;
+}
+hr{
+    background-image: none;
 }
 

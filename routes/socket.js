@@ -267,9 +267,9 @@ module.exports = (io) => {
             rooms[room].chosenQuestion = "";
             rooms[room].currentRound++;
 
-            for(key in playerScores){
-                playerScores[key] = 0;
-            }
+            //for(key in playerScores){
+              //  playerScores[key] = 0;
+            //}
             
 
             if(rooms[room].currentRound > rooms[room].numRounds){
@@ -458,10 +458,35 @@ module.exports = (io) => {
         }
 
         function endGame(room){
+            
+            let Game = require('../models/game');
+
             var items = Object.keys(rooms[room].playerScores).map(function(key) {
                 return [key, rooms[room].playerScores[key]];
             });
+
             var finalScores = items.sort(function(first, second) {return second[1] - first[1];});
+
+            var dbRoomName = rooms[room].name;
+            var dbWinner = finalScores[0][0];
+            var dbNumQuestions = rooms[room].numRounds;
+            
+            var dbScores = JSON.stringify(rooms[room].playerScores);
+
+
+            var dbPlayers = Object.keys(rooms[room].playerScores);
+            var dbNumRounds = rooms[room].numRounds;
+
+            const newGame = new Game({
+                RoomName: dbRoomName,
+                Winner: dbWinner,
+                TotalQuestions: dbNumQuestions,
+                Scores: dbScores,
+                Players: dbPlayers,
+                Rounds: dbNumRounds
+            });
+
+            Game.saveEndGame(newGame);
 
             /******************************!!!!!!!!!@@@@@@@@########$$$$$$$$$$%%%%%%%%%%%%%%%%%^^^^^^^^^^^^^^^^&&&&&&&&&&&&&&&&&&&&&&&&&&&&
              * ******************************!!!!!!!!!@@@@@@@@########$$$$$$$$$$%%%%%%%%%%%%%%%%%^^^^^^^^^^^^^^^^&&&&&&&&&&&&&&&&&&&&&&&&&&&&

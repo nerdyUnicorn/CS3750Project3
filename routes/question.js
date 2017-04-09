@@ -23,25 +23,37 @@ router.post('/add', (req, res, next) => {
     const answer = req.body.answer;
     const category = req.body.category;
    
-    Question.checkQuestion(questionIn, (err, question) =>{
-        if (err) throw err;
-    if (question != null) {
-        req.flash('error_msg', "Question already exists.");
-        res.redirect('/question/add');
-    } 
-    else {
-        const newQuestion = new Question({
-        question: questionIn,
-        answer: answer,
-        category: category });
+    req.checkBody('questionIn', 'Question field is required').notEmpty();
+    req.checkBody('answer', 'Answer field is required').notEmpty();
 
-            Question.addQuestion(newQuestion, (err, question)=> {
-                if (err) throw err;
-                req.flash('success_msg', 'Question is added.');
-                res.redirect('/question/add');
-            });
+    let errors = req.validationErrors();
+
+    if (errors){
+        req.flash('error_msg', "Neither field may be blank");
+        res.redirect('/question/add');
+    } else {
+
+        Question.checkQuestion(questionIn, (err, question) =>{
+            if (err) throw err;
+
+            if (question != null) {
+            req.flash('error_msg', "Question already exists.");
+            res.redirect('/question/add');
+            } 
+            else {
+                const newQuestion = new Question({
+                question: questionIn,
+                answer: answer,
+                category: category });
+
+                Question.addQuestion(newQuestion, (err, question)=> {
+                    if (err) throw err;
+                    req.flash('success_msg', 'Question is added.');
+                    res.redirect('/question/add');
+                });
+            }
+        });
     }
-    });
 });
 
 //get the edit page by the question id
@@ -64,11 +76,22 @@ router.post('/edit/:id', (req, res, next)=> {
     const query = {_id: req.params.id}
     const update = {question: req.body.question, answer: req.body.answer, category: req.body.category}
 
-    Question.updateQuestion(query, update, {}, (err, question) => {
-        if(err) throw err;
-        req.flash('success_msg', 'Question is updated.');
-        res.redirect('/question/edit/'+question._id);
-    });
+    req.checkBody('question', 'Question field is required').notEmpty();
+    req.checkBody('answer', 'Answer field is required').notEmpty();
+
+    let errors = req.validationErrors();
+
+    if (errors){
+        req.flash('error_msg', "Neither field may be blank");
+        res.redirect('/question/edit/'+query._id);
+    }
+    else{
+        Question.updateQuestion(query, update, {}, (err, question) => {
+            if(err) throw err;
+            req.flash('success_msg', 'Question is updated.');
+            res.redirect('/question/edit/'+question._id);
+        });
+    }
 })
 
 module.exports = router;

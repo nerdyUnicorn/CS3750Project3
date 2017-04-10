@@ -23,14 +23,14 @@ router.post('/add', (req, res, next) => {
     const answer = req.body.answer;
     const category = req.body.category;
    
-    req.checkBody('questionIn', 'Question field is required').notEmpty();
+    req.checkBody('question', 'Question field is required').notEmpty();
     req.checkBody('answer', 'Answer field is required').notEmpty();
 
     let errors = req.validationErrors();
 
     if (errors){
-        req.flash('error_msg', "Neither field may be blank");
-        res.redirect('/question/add');
+        //req.flash('error_msg', "Neither field may be blank");
+        res.render('add', {errors: errors});
     } else {
 
         Question.checkQuestion(questionIn, (err, question) =>{

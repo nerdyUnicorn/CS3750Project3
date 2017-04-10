@@ -10,10 +10,10 @@ block content
         form(method='POST' action='/question/add')
             div.form-group
                 label(for='question') Please enter a question:
-                input#question.form-control(type='text', placeholder='Question Text' name='question')
+                input#question.form-control(type='text', placeholder='Question Text' name='question', required)
             div.form-group
                 label(for='answer') Answer:
-                input#answer.form-control(type='text', placeholder='' name='answer')
+                input#answer.form-control(type='text', placeholder='' name='answer', required)
             div.form-group
                 label Category:
                 input(type='radio', name='category' value='Definitions' checked)

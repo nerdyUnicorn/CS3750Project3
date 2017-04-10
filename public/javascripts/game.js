@@ -289,6 +289,7 @@ $(function() {
     });
 
     socket.on('endGame', function(scores){
+        $finalScores.empty();
         $reviewAnswersPage.hide();
         $( "input" ).remove( ".btnQuestions" );
         $( "input" ).remove( ".selectedAnswer" );
@@ -299,14 +300,13 @@ $(function() {
         $roomTitle.text('Game Ended!!!')
         $gameWinner.text(scores[0][0]+' won the game!!!');
         $.each(scores, function(key, value){
-            var finalScore= $('<h3 class="userAnswers">'+value[0]+'\'s finalScore: '+value[1]+'</h3>');
+            var finalScore= $('<h3 class="userAnswers">'+value[0]+'\'s final score: '+value[1]+'</h3>');
             $finalScores.append(finalScore);
         })
     })
 
     $btnRestartGame.click(function(){
         $gameWinner.text('');
-        $finalScores.empty();
         $endGamePage.hide();
         socket.emit('restartGame', $room.val());
     })

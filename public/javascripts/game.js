@@ -134,7 +134,7 @@ $(function() {
     });
 
     socket.on('roomAlreadyExists', function (exampleRoom){
-        $createRoomError.text('That room already exists. Try another one like ' + exampleRoom);
+        $createRoomError.text('That game already exists. Try another one like ' + exampleRoom);
     });
 
     socket.on('createRoomErrors', function(problems){
@@ -142,7 +142,7 @@ $(function() {
     });
 
     socket.on('noSuchRoom', function(){
-        $startError.text('There is no room with that name.');
+        $startError.text('There is no game with that name.');
     })
 
     //When you join a room you see a list of the players that have joined (and probably need to add how many are left to join).

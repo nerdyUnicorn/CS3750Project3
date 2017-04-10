@@ -1,4 +1,11 @@
+body {
+  padding: 50px;
+  font: 14px "Arial Black", Helvetica, Arial, sans-serif;
+  background-image: url("../stylesheets/images/background1.jpg");
+  background-size: cover;
+  background-origin: content-box; 
 
+}
 #messages{
     padding: 10px;
 }

@@ -20,7 +20,7 @@ const GameSchema = mongoose.Schema({
     Rounds: {
         type: Number
     },
-    GameEndedOn: {
+    GameEndTime: {
         type: Date,
         default: Date.now
     },

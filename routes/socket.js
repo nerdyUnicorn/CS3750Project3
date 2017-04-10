@@ -466,7 +466,7 @@ module.exports = (io) => {
 
             var finalScores = items.sort(function(first, second) {return second[1] - first[1];});
 
-            var dbRoomName = rooms[room].name;
+            var dbGameName = rooms[room].name;
             var dbWinner = finalScores[0][0];
             var dbNumQuestions = rooms[room].numRounds;
             
@@ -477,7 +477,7 @@ module.exports = (io) => {
             var dbNumRounds = rooms[room].numRounds;
 
             const newGame = new Game({
-                RoomName: dbRoomName,
+                GameName: dbGameName,
                 Winner: dbWinner,
                 TotalQuestions: dbNumQuestions,
                 Scores: dbScores,

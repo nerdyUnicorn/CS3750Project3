@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 // End of Game Schema
 const GameSchema = mongoose.Schema({
-    RoomName: {
+    GameName: {
         type: String
     },
     Winner: {
@@ -20,7 +20,7 @@ const GameSchema = mongoose.Schema({
     Rounds: {
         type: Number
     },
-    created_at: {
+    GameEndTime: {
         type: Date,
         default: Date.now
     },

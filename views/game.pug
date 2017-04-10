@@ -19,8 +19,8 @@ block content
             h1.roomTitle
             h3.timer
 
-        div.loading
-            <div class="dizzy-gillespie"></div>
+        .loading
+            .dizzy-gillespie
 
 
         div.answersPage
@@ -96,41 +96,41 @@ block content
                 ul.list-group
                     li.list-group-item
                         | All
-                        .pull-right
+                        .pull-right.material-switch
                             input#allCategories(name='category', type='checkbox', value='All' checked)
-                            label.label-success(for='All')
+                            label.label-success(for='allCategories')
                     li.list-group-item
                         | Definitions
-                        .pull-right
+                        .pull-right.material-switch
                             input#definitions(name='category', type='checkbox', value='Definitions')
-                            label.label-success(for='Definitions')
+                            label.label-success(for='definitions')
                     li.list-group-item
                         | Famous People
-                        .pull-right
+                        .pull-right.material-switch
                             input#famousPeople(name='category', type='checkbox', value='Famous People')
-                            label.label-success(for='Famous People')
+                            label.label-success(for='famousPeople')
                     li.list-group-item
                         | Acronyms
-                        .pull-right
+                        .pull-right.material-switch
                             input#acronyms(name='category', type='checkbox', value='Acronyms')
-                            label.label-success(for='Acronyms')
+                            label.label-success(for='acronyms')
                     li.list-group-item
                         | Movie Headlines
-                        .pull-right
+                        .pull-right.material-switch
                             input#movieHeadlines(name='category', type='checkbox', value='Movie Headlines')
-                            label.label-success(for='Movie Headlines')
+                            label.label-success(for='movieHeadlines')
                     li.list-group-item
                         | Ludicrous Laws
-                        .pull-right
+                        .pull-right.material-switch
                             input#ludicrousLaws(name='category', type='checkbox', value='Ludicrous Laws')
-                            label.label-success(for='Ludicrous Laws')
+                            label.label-success(for='ludicrousLaws')
             div.formGroup
                 button.room.btn.btn-primary#newRoomButton Create New Game
 
         div.endGame
             //h1(style="position:absolute; top:120px; left:525px") Game Ended!!
 
-            img(style="position:absolute; top:200px; right:610px" src="C:\Users\Owner\CS3750Project3\bin\thWCCKGJ8R.jpg")
+            //img(style="position:absolute; top:200px; right:610px" src="C:\Users\Owner\CS3750Project3\bin\thWCCKGJ8R.jpg")
 
             h2.gameWinner
 

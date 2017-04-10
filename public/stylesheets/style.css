@@ -11,9 +11,9 @@ a {
   color: white;
 }
 
-.container{
+/*.container{
   color: black;
-}
+}*/
 
 /*form{
     width: max-content;
@@ -48,7 +48,7 @@ a {
     border-color: steelblue;
 }
 
-/*div.startPage{
+/*.startPage{
     width: max-content;
     border-color: steelblue;
     border-width: 10px;
@@ -59,13 +59,13 @@ a {
     text-align: center;
 }
 
-div.startPage h1{
+.startPage h1{
     text-align: center;
     text-decoration: underline;
     padding-bottom: 10px;
 }
 
-div.createRoomPage{
+.createRoomPage{
     width: max-content;
     border-color: steelblue;
     border-width: 10px;
@@ -76,7 +76,7 @@ div.createRoomPage{
     text-align: center;
 }
 
-div.room{
+.room{
     width: max-content;
     border-color: steelblue;
     border-width: 10px;

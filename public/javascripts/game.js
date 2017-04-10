@@ -191,7 +191,7 @@ $(function() {
         $.each(questions, function(key, value){
             var cat = $('<h3 class="category">'+key+'</h3>');
             $chooseQuestions.append(cat);
-            var btn = $('<input type="button" value="'+value+'" class="btnQuestions"/>');
+            var btn = $('<input type="button" value="'+value+'" class="btnQuestions btn btn-success"/>');
             $chooseQuestions.append(btn);
             lastQuestion = value;
         })
@@ -238,7 +238,7 @@ $(function() {
         $roomTitle.text('Choose the answer that you think is correct!')
         var lastAnswer = '';
         $.each(answers, function(index, value){
-            var btn= $('<input type="button" id="'+value+'" class="selectedAnswer" value="'+value.toUpperCase()+'"/>');
+            var btn= $('<input type="button" id="'+value+'" class="selectedAnswer btn btn-success" style="padding:25px; margin:10px;" value="'+value.toUpperCase()+'"/>');
             $selectAnswerPage.append(btn);
             lastAnswer = value;
         })

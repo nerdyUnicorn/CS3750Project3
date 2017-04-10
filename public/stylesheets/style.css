@@ -1,24 +1,3 @@
-body {
-  padding: 50px;
-  font: 14px "Arial Black", Helvetica, Arial, sans-serif;
-  background-image: url("../stylesheets/images/background1.jpg");
-  background-size: cover;
-  background-origin: content-box; 
-
-}
-
-.container{
-    width: max-content;
-    border-color: steelblue;
-    border-width: 10px;
-    border-style: outset;
-    padding: 50px;
-    margin: auto;
-    border-radius: 8px;
-    text-align: center;
-    background-image: url("../stylesheets/images/white.jpg");
-}
-
 #messages{
     padding: 10px;
 }
